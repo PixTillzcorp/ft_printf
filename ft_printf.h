@@ -21,6 +21,7 @@ int			ft_printf(const char *format, ...);
 char		*flag_presc(const char *format, va_list *args);
 char		*flag_space(const char *format, va_list *args);
 void		flag_conv(const char *format, va_list *args, int presc);
+char 		*flag_flag(const char *format);
 char		*choice(const char *format, va_list *args);
 
 #endif

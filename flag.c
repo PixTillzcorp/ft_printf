@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-void	flag_conv(const char *format, va_list *args, int presc)
+void	flag_conv(const char *fmt, va_list *args, char *flag, int minw, int pre)
 {
 	if (*format == 'd' || *format == 'i')
 		ft_putnbr(va_arg(*args, int));
@@ -26,10 +26,11 @@ void	flag_conv(const char *format, va_list *args, int presc)
 	// 	ft_putstr(ft_ptr_to_hex(va_arg(*args, void *)));
 }
 
-char	*flag_presc(const char *format, va_list *args)
+char	*flag_presc(const char *format, va_list *args, char flag)
 {
 	int presc;
 
+	presc = 0;
 	if (ft_isalnum(*format))
 	{
 		presc = ft_atoi(format);
@@ -38,23 +39,68 @@ char	*flag_presc(const char *format, va_list *args)
 		format += (ft_isalpha(*format) ? 0 : ft_strlen(ft_itoa(presc)));
 	}
 	if (ft_isalpha(*format))
-		flag_conv(format++, args, presc);
-	return ((char *)format);
-}
-
-char	*flag_space(const char *format, va_list *args)
-{
-	int space;
-
-	space = 0;
-	ft_putchar(' ');
-	while (*(format + (space++)) == ' ')
-		format++;
-	format = choice(format, args);
+		flag_conv(format++, args, flag, presc);
 	return ((char *)format);
 }
 
 // char	*flag_minw(const char *format, va_list *args)
 // {
-	
+// 	int minw;
+
+// 	minw = ft_itoa(*format);
+
 // }
+
+char 	*flag_flag(const char **format)
+{
+	char *ret;
+
+	ret = ft_strdup("");
+	while (ft_isflag(*format))
+	{
+		if (ft_strchr(ret, **format))
+			*(format)++;
+		else
+			ret = ft_chrjoin_free(ret, **(*(format++)), 1);
+	}
+	return (ret);
+}
+
+int		ft_isflag(const char *format)
+{
+	int ret;
+
+	ret = 0;
+	ret += (*format == '#' ? 1 : 0);
+	ret += (*format == '-' ? 1 : 0);
+	ret += (*format == '+' ? 1 : 0);
+	ret += (*format == ' ' ? 1 : 0);
+	ret += (*format == '0' ? 1 : 0);
+	return (ret);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

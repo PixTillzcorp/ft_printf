@@ -14,6 +14,9 @@
 
 char	*choice(const char *format, va_list *args)
 {
+	char *flag;
+
+	flag = flag_flag(&format);
 	if (ft_isalpha(*format))
 		flag_conv(format++, args, 0);
 	// else if (*format == ('#' || ' ' || '+' || '-' || '0'))
@@ -22,8 +25,6 @@ char	*choice(const char *format, va_list *args)
 	// 	format = flag_minw(format, args);
 	else if (*format == '.')
 		format = flag_presc(format + 1, args);
-	else if (*format == ' ' && !ft_isalpha(*(format - 1)))
-		format = flag_space(format, args);
 	else if (*format == '%')
 	{
 		ft_putchar('%');
