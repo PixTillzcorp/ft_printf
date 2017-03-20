@@ -14,7 +14,7 @@
 
 int		main(void)
 {
-	ft_printf("%e\n",55.25896);
-	printf("%e\n", 55.25896);
+	ft_printf("%s %    d\n", "coucou", 42);
+	printf("%s\n", "coucou");
 	return (0);
 }
