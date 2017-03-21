@@ -12,25 +12,29 @@
 
 #include "ft_printf.h"
 
-char	*choice(const char *format, va_list *args)
+int		choice(const char *format, va_list *args)
 {
 	char *flag;
+	int len;
 
 	flag = flag_flag(&format);
+	len = flag_conv(&format, args, flag_flag(&format), flag_minw(&format), flag_pre(&format));
 	if (ft_isalpha(*format))
-		flag_conv(format++, args, 0);
-	// else if (*format == ('#' || ' ' || '+' || '-' || '0'))
-	// 	i += flag_cara(format, i);
-	// else if (ft_isnum(*format))
-	// 	format = flag_minw(format, args);
+		len = flag_conv(&format, args, flag, 0, 0);
+	else if (ft_isnum(*format))
+	{
+		minw = ft_atoi(format);
+		format += ft_strlen(ft_itoa(minw));
+	}
 	else if (*format == '.')
-		format = flag_presc(format + 1, args);
+		 = flag_pre(format + 1);
 	else if (*format == '%')
 	{
 		ft_putchar('%');
 		format++;
 	}
-	return ((char *)format);
+	free(flag);
+	return (len);
 }
 
 int		ft_printf(const char *format, ...)
