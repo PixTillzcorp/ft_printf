@@ -14,7 +14,7 @@
 
 int		main(void)
 {
-	ft_printf("%.s\n", "coucou");
-	printf("%-5.1s\n", "coucou");
+	ft_printf("%e\n", 522322.345536);
+	printf("%e\n", 522322.345536);
 	return (0);
 }

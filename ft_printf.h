@@ -13,14 +13,15 @@
 #ifndef	FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include "libft/libft.h"
+# include "libftprintf/libft.h"
 # include <stdio.h>
 # include <stdarg.h>
 
 int			ft_printf(const char *format, ...);
-int			flag_pre(const char *format);
-int			choice(const char *format, va_list *args);
+int			flag_pre(const char **format);
+int			flag_minw(const char **format);
+char 		*flag_flag(const char **format);
 int			flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre);
-char 		*flag_flag(const char *format);
+int			choice(const char **format, va_list *args);
 
 #endif

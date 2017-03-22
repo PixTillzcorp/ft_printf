@@ -12,27 +12,13 @@
 
 #include "ft_printf.h"
 
-int		choice(const char *format, va_list *args)
+int		choice(const char **format, va_list *args)
 {
 	char *flag;
 	int len;
 
-	flag = flag_flag(&format);
-	len = flag_conv(&format, args, flag_flag(&format), flag_minw(&format), flag_pre(&format));
-	if (ft_isalpha(*format))
-		len = flag_conv(&format, args, flag, 0, 0);
-	else if (ft_isnum(*format))
-	{
-		minw = ft_atoi(format);
-		format += ft_strlen(ft_itoa(minw));
-	}
-	else if (*format == '.')
-		 = flag_pre(format + 1);
-	else if (*format == '%')
-	{
-		ft_putchar('%');
-		format++;
-	}
+	flag = flag_flag(format);
+	len = flag_conv(format, args, flag_flag(format), flag_minw(format), flag_pre(format));
 	free(flag);
 	return (len);
 }
@@ -40,12 +26,17 @@ int		choice(const char *format, va_list *args)
 int		ft_printf(const char *format, ...)
 {
 	va_list args;
+	char **ad;
 
 	va_start (args, format);
 	while (*format)
 	{
+		ad = (char **)(&format);
 		if (*format == '%')
-			format = choice(++format, &args);
+		{
+			*ad += 1;
+			choice((const char **)ad, &args);
+		}
 		else
 			ft_putchar(*(format++));
 	}

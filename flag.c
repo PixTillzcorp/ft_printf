@@ -2,36 +2,45 @@
 
 int		flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre)
 {
-	if (**format == 'd' || **format == 'i')
+	if (**fmt == 'd' || **fmt == 'i')
 		ft_putnbr(va_arg(*args, int));
-	// else if (*format == 'D')
-	// 	ft_putlnbr(va_arg(*args, long long int));
-	else if (**format == 's')
-		ft_putnstr(va_arg(*args, char *), presc);
-	else if (**format == 'S')
+	else if (**fmt == 'D')
+		ft_putlnbr(va_arg(*args, long long int));
+	else if (**fmt == 's')
+		ft_putnstr(va_arg(*args, char *), pre);
+	else if (**fmt == 'S')
 		ft_putlstr(va_arg(*args, wchar_t *));
-	else if (**format == 'c')
+	else if (**fmt == 'c')
 		ft_putchar(va_arg(*args, int));
-	else if (**format == 'C')
+	else if (**fmt == 'C')
 		ft_putlchar(va_arg(*args, wchar_t));
-	else if (**format == 'e' || **format == 'E')
-		ft_putstr(ft_dec_to_sci(va_arg(*args, double), **format, ft_itoa(presc)));
-	else if (**format == 'o')
+	else if (**fmt == 'e' || **fmt == 'E')
+		ft_putstr(ft_dec_to_sci(va_arg(*args, double), **fmt, ft_itoa(pre)));
+	else if (**fmt == 'o')
 		ft_putstr(ft_dec_to_base(va_arg(*args, unsigned int), 8));
-	// else if (**format == 'O')
-	// 	ft_putstr(ft_ldec_to_base(va_arg(*args, long long int), 8));
-	else if (**format == 'x' || **format == 'X')
-		ft_putstr(ft_dec_to_hex(va_arg(*args, unsigned int), **format));
-	// else if (**format == 'p')
-	// 	ft_putstr(ft_ptr_to_hex(va_arg(*args, void *)));
+	else if (**fmt == 'O')
+		ft_putstr(ft_ldec_to_base(va_arg(*args, long long int), 8));
+	else if (**fmt == 'x' || **fmt == 'X')
+		ft_putstr(ft_dec_to_hex(va_arg(*args, unsigned int), **fmt));
+	else if (**fmt == 'p')
+		ft_putstr(ft_ptr_to_hex(va_arg(*args, void *)));
+	(*fmt)++;
+	return (1);
 }
 
 int		flag_minw(const char **format)
 {
-	if (!ft_isnum(**format))
+	int ret;
+
+	ret = 0;
+	if (!ft_isdigit(**format))
 		return (0);
 	else
-		return (ft_atoi(**format));
+	{
+		ret = ft_atoi(*format);
+		*format += ft_strlen(ft_itoa(ret));
+		return (ret);
+	}
 }
 
 int		flag_pre(const char **format)
@@ -40,8 +49,11 @@ int		flag_pre(const char **format)
 
 	if (**format != '.')
 		return (0);
-	if (**format == '.' && !ft_isnum(*(format + 1)))
+	if (**format == '.' && !ft_isdigit((int)*(format + 1)))
+	{
+		(*format)++;
 		return (0);
+	}
 	pre = 0;
 	if (ft_isalnum(**format))
 	{
@@ -51,21 +63,6 @@ int		flag_pre(const char **format)
 		*format += (ft_isalpha(**format) ? 0 : ft_strlen(ft_itoa(pre)));
 	}
 	return (pre);
-}
-
-char 	*flag_flag(const char **format)
-{
-	char *ret;
-
-	ret = ft_strdup("");
-	while (ft_isflag(*format))
-	{
-		if (ft_strchr(ret, **format))
-			*(format)++;
-		else
-			ret = ft_chrjoin_free(ret, **(*(format++)), 1);
-	}
-	return (ret);
 }
 
 int		ft_isflag(const char *format)
@@ -78,5 +75,23 @@ int		ft_isflag(const char *format)
 	ret += (*format == '+' ? 1 : 0);
 	ret += (*format == ' ' ? 1 : 0);
 	ret += (*format == '0' ? 1 : 0);
+	return (ret);
+}
+
+char 	*flag_flag(const char **format)
+{
+	char *ret;
+
+	ret = ft_strdup("");
+	while (ft_isflag(*format))
+	{
+		if (ft_strchr(ret, **format))
+			(*format)++;
+		else
+		{
+			ret = ft_chrjoin_free(ret, **format, 1);
+			(*format)++;
+		}
+	}
 	return (ret);
 }
