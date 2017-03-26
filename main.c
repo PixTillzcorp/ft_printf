@@ -14,7 +14,7 @@
 
 int		main(void)
 {
-	ft_printf("%e\n", 522322.345536);
-	printf("%e\n", 522322.345536);
+	ft_printf("%20d\n", 2147483647);
+	printf("%20d\n", 2147483647);
 	return (0);
 }

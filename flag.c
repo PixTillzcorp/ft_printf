@@ -2,30 +2,43 @@
 
 int		flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre)
 {
-	if (**fmt == 'd' || **fmt == 'i')
-		ft_putnbr(va_arg(*args, int));
-	else if (**fmt == 'D')
-		ft_putlnbr(va_arg(*args, long long int));
-	else if (**fmt == 's')
-		ft_putnstr(va_arg(*args, char *), pre);
-	else if (**fmt == 'S')
-		ft_putlstr(va_arg(*args, wchar_t *));
-	else if (**fmt == 'c')
-		ft_putchar(va_arg(*args, int));
-	else if (**fmt == 'C')
-		ft_putlchar(va_arg(*args, wchar_t));
-	else if (**fmt == 'e' || **fmt == 'E')
-		ft_putstr(ft_dec_to_sci(va_arg(*args, double), **fmt, ft_itoa(pre)));
-	else if (**fmt == 'o')
-		ft_putstr(ft_dec_to_base(va_arg(*args, unsigned int), 8));
-	else if (**fmt == 'O')
-		ft_putstr(ft_ldec_to_base(va_arg(*args, long long int), 8));
-	else if (**fmt == 'x' || **fmt == 'X')
-		ft_putstr(ft_dec_to_hex(va_arg(*args, unsigned int), **fmt));
-	else if (**fmt == 'p')
-		ft_putstr(ft_ptr_to_hex(va_arg(*args, void *)));
-	(*fmt)++;
-	return (1);
+	if (**fmt == 'l')
+		//
+	if (**fmat == 'h')
+		//
+	if (**fmat == 'j')
+		//
+	if (**fmat == 'z')
+		//
+	if (**fmat == '%')
+	{
+		ft_putchar('%');
+		return (1);
+	}
+	// if (**fmt == 'd' || **fmt == 'i')
+	// 	ft_putnbr(va_arg(*args, int));
+	// else if (**fmt == 'D')
+	// 	ft_putlnbr(va_arg(*args, long long int));
+	// else if (**fmt == 's')
+	// 	ft_putnstr(va_arg(*args, char *), pre);
+	// else if (**fmt == 'S')
+	// 	ft_putlstr(va_arg(*args, wchar_t *));
+	// else if (**fmt == 'c')
+	// 	ft_putchar(va_arg(*args, int));
+	// else if (**fmt == 'C')
+	// 	ft_putlchar(va_arg(*args, wchar_t));
+	// else if (**fmt == 'e' || **fmt == 'E')
+	// 	ft_putstr(ft_dec_to_sci(va_arg(*args, double), **fmt, ft_itoa(pre)));
+	// else if (**fmt == 'o')
+	// 	ft_putstr(ft_dec_to_base(va_arg(*args, unsigned int), 8));
+	// else if (**fmt == 'O')
+	// 	ft_putstr(ft_ldec_to_base(va_arg(*args, long long int), 8));
+	// else if (**fmt == 'x' || **fmt == 'X')
+	// 	ft_putstr(ft_dec_to_hex(va_arg(*args, unsigned int), **fmt));
+	// else if (**fmt == 'p')
+	// 	ft_putstr(ft_ptr_to_hex(va_arg(*args, void *)));
+	// (*fmt)++;
+	// return (1);
 }
 
 int		flag_minw(const char **format)
@@ -48,19 +61,20 @@ int		flag_pre(const char **format)
 	int pre;
 
 	if (**format != '.')
-		return (0);
-	if (**format == '.' && !ft_isdigit((int)*(format + 1)))
+		return (-1);
+	else
 	{
 		(*format)++;
-		return (0);
-	}
-	pre = 0;
-	if (ft_isalnum(**format))
-	{
-		pre = ft_atoi(*format);
-		if (pre <= 0)
-			pre = 0;
-		*format += (ft_isalpha(**format) ? 0 : ft_strlen(ft_itoa(pre)));
+		pre = 0;
+		if (ft_isdigit(**format))
+		{
+			pre = ft_atoi(*format);
+			if (pre <= 0)
+				pre = 0;
+			*format += (ft_isalpha(**format) ? 0 : ft_strlen(ft_itoa(pre)));
+		}
+		else
+			return(0);
 	}
 	return (pre);
 }

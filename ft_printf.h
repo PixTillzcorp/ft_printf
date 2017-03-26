@@ -13,15 +13,27 @@
 #ifndef	FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include "libftprintf/libft.h"
+# include "libft/libft.h"
 # include <stdio.h>
 # include <stdarg.h>
 
-int			ft_printf(const char *format, ...);
-int			flag_pre(const char **format);
-int			flag_minw(const char **format);
-char 		*flag_flag(const char **format);
-int			flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre);
-int			choice(const char **format, va_list *args);
+typedef union	u_types
+{
+    int d;
+    char c;
+    long l;
+    short i;
+    char* s;
+    size_t z;
+    double d;
+    long long ll;
+}				t_types;
+
+int				ft_printf(const char *format, ...);
+int				flag_pre(const char **format);
+int				flag_minw(const char **format);
+char			*flag_flag(const char **format);
+int				flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre);
+int				choice(const char **format, va_list *args);
 
 #endif
