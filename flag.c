@@ -2,15 +2,13 @@
 
 int		flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre)
 {
-	if (**fmt == 'l')
-		//
-	if (**fmat == 'h')
-		//
-	if (**fmat == 'j')
-		//
-	if (**fmat == 'z')
-		//
-	if (**fmat == '%')
+	char *ret;
+
+	if (**fmt == 'l' || **fmt == 'h')
+		ret = conv_hl(fmt, args, **fmt, flag_hl(**fmt, **fmt, 0));
+	if (**fmt == 'j' || **fmt == 'z')
+		ret = conv_jz(fmt, args, **fmt);
+	if (**fmt == '%')
 	{
 		ft_putchar('%');
 		return (1);

@@ -23,9 +23,9 @@ typedef union	u_types
     char c;
     long l;
     short i;
-    char* s;
+    char *s;
     size_t z;
-    double d;
+    double dbl;
     long long ll;
 }				t_types;
 
