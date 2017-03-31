@@ -27,6 +27,8 @@ typedef union	u_types
     size_t z;
     double dbl;
     long long ll;
+    intmax_t imt;
+    uintmax_t uimt;
 }				t_types;
 
 int				ft_printf(const char *format, ...);

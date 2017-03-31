@@ -3,16 +3,25 @@
 int		flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre)
 {
 	char *ret;
+	char *lm;
 
-	if (**fmt == 'l' || **fmt == 'h')
-		ret = conv_hl(fmt, args, **fmt, flag_hl(**fmt, **fmt, 0));
-	if (**fmt == 'j' || **fmt == 'z')
-		ret = conv_jz(fmt, args, **fmt);
-	if (**fmt == '%')
+	lm = ft_strdup("");
+	if (ft_islm(**fmt))
+		lm = flag_lm(**fmt, &lm, **fmt);
+	else
+		lm = NULL;
+	if (ft_isconv(**fmt))
+	{
+		flag = ft_chrjoin_free(flag, **fmt, 1);
+		return (convert(args, flag, minw, pre, lm))
+	}
+	else if (**fmt == '%')
 	{
 		ft_putchar('%');
 		return (1);
 	}
+	else
+		return (-1);
 	// if (**fmt == 'd' || **fmt == 'i')
 	// 	ft_putnbr(va_arg(*args, int));
 	// else if (**fmt == 'D')
