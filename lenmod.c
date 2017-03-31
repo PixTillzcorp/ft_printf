@@ -37,16 +37,18 @@ int		convert(va_list *args, char *flag, int minw, int pre, char *lm)
 	char conv;
 
 	conv = recup_conv(&flag);
-	if (conv == 'i' || conv == 'd')
-		ret = decimal(args, lm, pre);
+	if (conv == 'i' || conv == 'd' || conv == 'D')
+		ret = decimal(args, lm, pre, conv);
 	else if (conv == 'c' || conv == 'C')
-		ret = chrct(args, lm, pre);
+		ret = chrct(args, lm, pre, conv);
 	else if (conv == 's' || conv == 'S')
-		ret = string(args, lm, pre);
-	else if (conv == 'o' || conv == 'O' || conv == 'x' || conv == 'X')
-		ret = base_swap(args, lm, pre, conv);
+		ret = string(args, lm, pre, conv);
+	else if (conv == 'o' || conv == 'O')
+		ret = base_swap_oct(args, lm, pre, conv);
+	else if (conv == 'x' || conv == 'X')
+		ret = base_swap_hex(args, lm, pre, conv);
 	else if (conv == 'e' || conv == 'E')
-		ret = base_swap(args, lm, pre, conv);
+		ret = base_swap_sci(args, lm, pre, conv);
 }
 
 char	recup_conv(char **flag)

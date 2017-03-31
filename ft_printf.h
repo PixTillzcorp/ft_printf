@@ -25,10 +25,14 @@ typedef union	u_types
     short i;
     char *s;
     size_t z;
+    wint_t wc;
+    wchar_t *ws;
     double dbl;
     long long ll;
     intmax_t imt;
     uintmax_t uimt;
+    unsigned int ud;
+    unsigned char uc;
 }				t_types;
 
 int				ft_printf(const char *format, ...);
