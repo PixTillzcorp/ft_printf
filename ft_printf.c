@@ -18,8 +18,7 @@ int		choice(const char **format, va_list *args)
 	int len;
 
 	flag = flag_flag(format);
-	len = flag_conv(format, args, flag_flag(format), flag_minw(format), flag_pre(format));
-	free(flag);
+	len = flag_conv(format, args, flag, flag_minw(format), flag_pre(format));
 	return (len);
 }
 

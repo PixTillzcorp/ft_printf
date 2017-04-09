@@ -14,7 +14,10 @@
 
 int		main(void)
 {
-	ft_printf("%20d\n", 2147483647);
-	printf("%20d\n", 2147483647);
+	int *ptr;
+
+	*ptr = 5;
+	ft_printf("%c\n", 'b');
+	printf("%c\n", 'b');
 	return (0);
 }

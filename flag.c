@@ -7,13 +7,14 @@ int		flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre)
 
 	lm = ft_strdup("");
 	if (ft_islm(**fmt))
-		lm = flag_lm(**fmt, &lm, **fmt);
+		flag_lm(fmt, &lm, **fmt);
 	else
 		lm = NULL;
 	if (ft_isconv(**fmt))
 	{
 		flag = ft_chrjoin_free(flag, **fmt, 1);
-		return (convert(args, flag, minw, pre, lm))
+		(*fmt)++;
+		return (convert(args, flag, minw, pre, lm));
 	}
 	else if (**fmt == '%')
 	{

@@ -1,6 +1,8 @@
+#include "ft_printf.h"
+
 void	flag_lm(const char **fmt, char **ret, char flag)
 {
-	*fmt++;
+	(*fmt)++;
 	*ret = ft_chrjoin_free(*ret, flag, 1);
 	if (**fmt == flag && (flag == 'h' || flag != 'l'))
 		*ret = ft_chrjoin_free(*ret, flag, 1);
@@ -37,6 +39,7 @@ int		convert(va_list *args, char *flag, int minw, int pre, char *lm)
 	char conv;
 
 	conv = recup_conv(&flag);
+	ret = NULL;
 	if (conv == 'i' || conv == 'd' || conv == 'D')
 		ret = decimal(args, lm, pre, conv);
 	else if (conv == 'c' || conv == 'C')
@@ -49,19 +52,29 @@ int		convert(va_list *args, char *flag, int minw, int pre, char *lm)
 		ret = base_swap_hex(args, lm, pre, conv);
 	else if (conv == 'e' || conv == 'E')
 		ret = base_swap_sci(args, lm, pre, conv);
+	else if (conv == 'p')
+		ret = ptr(args, lm, pre, conv);
+	else
+		return (0);
+	if (ret)
+		ft_putstr(ret);
+	return (1);
 }
 
 char	recup_conv(char **flag)
 {
+	char ret;
+
 	while (**flag)
 	{
 		if (ft_isconv(**flag))
 		{
+			ret = **flag;
 			**flag = '\0';
-			return (**flag);
+			return (ret);
 		}
 		else
 			(*flag)++;
 	}
-	return (NULL);
+	return (0);
 }
