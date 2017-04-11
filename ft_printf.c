@@ -18,9 +18,6 @@ int		choice(const char **format, va_list *args)
 	int len;
 
 	flag = flag_flag(format);
-	ft_putstr("flags = ");
-	ft_putstr(flag);
-	ft_putchar('\n');
 	len = flag_conv(format, args, flag, flag_minw(format), flag_pre(format));
 	return (len);
 }
@@ -39,12 +36,12 @@ int		ft_printf(const char *format, ...)
 		if (*format == '%')
 		{
 			*ad += 1;
-			len = choice((const char **)ad, &args);
+			len += choice((const char **)ad, &args);
 		}
 		else
 		{
-			ft_putchar(*(format++));
 			len++;
+			ft_putchar(*(format++));
 		}
 	}
 	va_end(args);

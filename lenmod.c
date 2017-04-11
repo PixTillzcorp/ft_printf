@@ -4,8 +4,11 @@ void	flag_lm(const char **fmt, char **ret, char flag)
 {
 	(*fmt)++;
 	*ret = ft_chrjoin_free(*ret, flag, 1);
-	if (**fmt == flag && (flag == 'h' || flag != 'l'))
+	if (**fmt == flag && (flag == 'h' || flag == 'l'))
+	{
 		*ret = ft_chrjoin_free(*ret, flag, 1);
+		(*fmt)++;
+	}
 }
 
 int		ft_isconv(const char tag)
@@ -20,6 +23,7 @@ int		ft_isconv(const char tag)
 	ret += (tag == 'o' || tag == 'O' ? 1 : 0);
 	ret += (tag == 'e' || tag == 'E' ? 1 : 0);
 	ret += (tag == 'p' || tag == 'i' ? 1 : 0);
+	ret += (tag == 'b' ? 1 : 0);
 	return (ret);
 }
 
@@ -39,7 +43,6 @@ int		convert(va_list *args, char *flag, int minw, int pre, char *lm)
 	char conv;
 
 	conv = recup_conv(flag);
-	ret = NULL;
 	if (conv == 'i' || conv == 'd' || conv == 'D')
 		ret = decimal(args, lm, pre, conv);
 	else if (conv == 'c' || conv == 'C')
@@ -47,18 +50,20 @@ int		convert(va_list *args, char *flag, int minw, int pre, char *lm)
 	else if (conv == 's' || conv == 'S')
 		ret = string(args, lm, pre, conv);
 	else if (conv == 'o' || conv == 'O')
-		ret = base_swap_oct(args, lm, pre, conv);
+		ret = base_swap_oct(args, lm, pre, conv, flag);
 	else if (conv == 'x' || conv == 'X')
 		ret = base_swap_hex(args, lm, pre, conv);
 	else if (conv == 'e' || conv == 'E')
 		ret = base_swap_sci(args, lm, pre, conv);
 	else if (conv == 'p')
-		ret = ptr(args, lm, pre, conv);
+		ret = ptr(args, lm, pre);
+	else if (conv == 'b')
+		ret = base_swap_bin(args, lm, pre);
 	else
 		return (0);
 	ret = add_flag(ret, minw, flag, conv);
 	ft_putstr(ret);
-	return (ft_strlen(ret));
+	return ((!ret ? 0 : ft_strlen(ret)));
 }
 
 char	recup_conv(char *flag)

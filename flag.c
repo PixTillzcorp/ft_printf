@@ -3,6 +3,7 @@
 int		flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre)
 {
 	char *lm;
+	char *ret;
 
 	lm = ft_strdup("");
 	if (ft_islm(**fmt))
@@ -17,35 +18,13 @@ int		flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre)
 	}
 	else if (**fmt == '%')
 	{
-		ft_putchar('%');
-		return (1);
+		ret = add_flag(ft_strdup("%"), minw, flag, '%');
+		ft_putstr(ret);
+		(*fmt)++;
+		return (ft_strlen(ret));
 	}
 	else
-		return (-1);
-	// if (**fmt == 'd' || **fmt == 'i')
-	// 	ft_putnbr(va_arg(*args, int));
-	// else if (**fmt == 'D')
-	// 	ft_putlnbr(va_arg(*args, long long int));
-	// else if (**fmt == 's')
-	// 	ft_putnstr(va_arg(*args, char *), pre);
-	// else if (**fmt == 'S')
-	// 	ft_putlstr(va_arg(*args, wchar_t *));
-	// else if (**fmt == 'c')
-	// 	ft_putchar(va_arg(*args, int));
-	// else if (**fmt == 'C')
-	// 	ft_putlchar(va_arg(*args, wchar_t));
-	// else if (**fmt == 'e' || **fmt == 'E')
-	// 	ft_putstr(ft_dec_to_sci(va_arg(*args, double), **fmt, ft_itoa(pre)));
-	// else if (**fmt == 'o')
-	// 	ft_putstr(ft_dec_to_base(va_arg(*args, unsigned int), 8));
-	// else if (**fmt == 'O')
-	// 	ft_putstr(ft_ldec_to_base(va_arg(*args, long long int), 8));
-	// else if (**fmt == 'x' || **fmt == 'X')
-	// 	ft_putstr(ft_dec_to_hex(va_arg(*args, unsigned int), **fmt));
-	// else if (**fmt == 'p')
-	// 	ft_putstr(ft_ptr_to_hex(va_arg(*args, void *)));
-	// (*fmt)++;
-	// return (1);
+		return (0);
 }
 
 int		flag_minw(const char **format)

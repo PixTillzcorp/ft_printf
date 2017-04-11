@@ -21,9 +21,11 @@ $(NAME): $(SRCO)
 	ar rc $(NAME) $(SRCO) && ranlib $(NAME)
 
 clean:
+	make -C ./libft clean
 	rm -f $(SRCO)
 
 fclean: clean
+	make -C ./libft fclean
 	rm -f $(NAME)
 
 re: fclean all

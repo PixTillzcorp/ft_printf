@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-char	*ptr(va_list *args, char *lm, int pre, char conv)
+char	*ptr(va_list *args, char *lm, int pre)
 {
 	t_types num;
 	char *ret;
@@ -12,33 +12,30 @@ char	*ptr(va_list *args, char *lm, int pre, char conv)
 		return (NULL);
 }
 
-char	*add_flag(char *ret, int minw, char *flag, char conv)
+char	*base_swap_bin(va_list *args, char *lm, int pre)
 {
-	ft_putstr("flags = ");
-	ft_putstr(flag);
-	ft_putchar('\n');
-	if (ft_strchr(flag, '#'))
-	{
-		if (conv == 'o' && ft_strcmp(ret, "0"))
-			ret = ft_strjoin_free("0", ret, 'r');
-		else if ((conv == 'x' || conv == 'X' ) && ft_strcmp(ret, "0"))
-			ret = ft_strjoin_free((conv == 'x' ? "0x" : "0X"), ret, 'r');
-	}
-	if (conv == 'd' || conv == 'D' || conv == 'i' || conv == 'e' || conv == 'E')
-	{
-		if (ft_strchr(flag, '+') && !ft_strchr(ret, '-'))
-			ret = ft_strjoin_free("+", ret, 'r');
-		else if (ft_strchr(flag, ' ') && !ft_strchr(ret, '-'))
-			ret = ft_strjoin_free(" ", ret, 'r');
-	}
-	while ((int)(ft_strlen(ret)) < minw)
-	{
-		if (ft_strchr(flag, '-'))
-			ret = ft_chrjoin_free(ret, ' ', 1);
-		else if (ft_strchr(flag, '0'))
-			ret = ft_strjoin_free("0", ret, 'r');
-		else
-			ret = ft_strjoin_free(" ", ret, 'r');
-	}
-	return (ret);
+	t_types num;
+	char *ret;
+
+	num.ll = va_arg(*args, long long);
+	if (!lm)
+		return (ret = ft_dec_to_bin(num.ud));
+	else if (ft_strcmp(lm, "l"))
+		return (ret = ft_ldec_to_bin((long long)num.l));
+	else if (ft_strcmp(lm, "ll"))
+		return (ret = ft_ldec_to_bin(num.ll));
+	else
+		return (NULL);
+}
+
+char	*base_swap_sci(va_list *args, char *lm, int pre, char conv)
+{
+	t_types num;
+	char *ret;
+
+	num.ll = va_arg(*args, long long);
+	if (!lm)
+		return (ret = ft_dec_to_sci((unsigned int)num.d, conv, ft_itoa(pre)));
+	else
+		return (NULL);
 }
