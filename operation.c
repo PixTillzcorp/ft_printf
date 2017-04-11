@@ -123,15 +123,3 @@ char	*base_swap_sci(va_list *args, char *lm, int pre, char conv)
 	else
 		return (NULL);
 }
-
-char	*ptr(va_list *args, char *lm, int pre, char conv)
-{
-	t_types num;
-	char *ret;
-
-	num.ptr = va_arg(*args, void *);
-	if (!lm)
-		return (ret = ft_ptr_to_hex(num.ptr));
-	else
-		return (NULL);
-}

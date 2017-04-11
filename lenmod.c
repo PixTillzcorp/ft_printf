@@ -38,7 +38,7 @@ int		convert(va_list *args, char *flag, int minw, int pre, char *lm)
 	char *ret;
 	char conv;
 
-	conv = recup_conv(&flag);
+	conv = recup_conv(flag);
 	ret = NULL;
 	if (conv == 'i' || conv == 'd' || conv == 'D')
 		ret = decimal(args, lm, pre, conv);
@@ -56,25 +56,27 @@ int		convert(va_list *args, char *flag, int minw, int pre, char *lm)
 		ret = ptr(args, lm, pre, conv);
 	else
 		return (0);
-	if (ret)
-		ft_putstr(ret);
-	return (1);
+	ret = add_flag(ret, minw, flag, conv);
+	ft_putstr(ret);
+	return (ft_strlen(ret));
 }
 
-char	recup_conv(char **flag)
+char	recup_conv(char *flag)
 {
 	char ret;
+	int i;
 
-	while (**flag)
+	i = 0;
+	while (flag[i])
 	{
-		if (ft_isconv(**flag))
+		if (ft_isconv(flag[i]))
 		{
-			ret = **flag;
-			**flag = '\0';
+			ret = flag[i];
+			flag[i] = 0;
 			return (ret);
 		}
 		else
-			(*flag)++;
+			i++;
 	}
 	return (0);
 }

@@ -2,7 +2,6 @@
 
 int		flag_conv(const char **fmt, va_list *args, char *flag, int minw, int pre)
 {
-	char *ret;
 	char *lm;
 
 	lm = ft_strdup("");
