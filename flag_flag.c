@@ -1,16 +1,16 @@
 #include "ft_printf.h"
 
-char	*add_flag(char *ret, int minw, char *flag, char conv)
+char	*add_flag(char *ret, int minw, char *flag, char conv, int pre)
 {
 	if (!ret)
-		return (ret = add_minw(ft_strdup(""), minw, flag, conv));
+		ret = ft_strdup("");
 	if (ft_strchr(flag, '#'))
 	{
 		if (!ft_strchr(flag, '0') || ft_strchr(flag, '-'))
 		{
-			if (conv == 'o' && ft_strcmp(ret, "0"))
+			if ((conv == 'o' || conv == 'O') && ft_strcmp(ret, "0"))
 				ret = ft_strjoin_free("0", ret, 'r');
-			else if ((conv == 'x' || conv == 'X' ) && ft_strcmp(ret, "0"))
+			else if ((conv == 'x' || conv == 'X' ) && ft_strcmp(ret, "0") && ft_strcmp(ret, ""))
 				ret = ft_strjoin_free((conv == 'x' ? "0x" : "0X"), ret, 'r');
 		}
 		else if (conv == 'b')
@@ -18,28 +18,32 @@ char	*add_flag(char *ret, int minw, char *flag, char conv)
 	}
 	if (conv == 'd' || conv == 'D' || conv == 'i' || conv == 'e' || conv == 'E')
 	{
-		if (ft_strchr(flag, '+') && !ft_strchr(ret, '-'))
+		if (ft_strchr(flag, '+') && !ft_strchr(ret, '-') && (ft_strchr(flag, '-') || !ft_strchr(flag, '0') || minw < ft_strlen(ret)))
 			ret = ft_strjoin_free("+", ret, 'r');
-		else if (ft_strchr(flag, ' ') && !ft_strchr(ret, '-'))
+		else if (ft_strchr(flag, ' ') && !ft_strchr(ret, '-') && minw < ft_strlen(ret))
 			ret = ft_strjoin_free(" ", ret, 'r');
 	}
-	return (ret = add_minw(ret, minw, flag, conv));
+	return (ret = add_minw(ret, minw, flag, conv, pre));
 }
 
-char	*add_minw(char *ret, int minw, char *flag, char conv)
+char	*add_minw(char *ret, int minw, char *flag, char conv, int pre)
 {
 	while ((int)(ft_strlen(ret)) < minw)
 	{
 		if (ft_strchr(flag, '-'))
 			ret = ft_chrjoin_free(ret, ' ', 1);
-		else if (ft_strchr(flag, '0'))
+		else if (ft_strchr(flag, '0') && pre < 0)
 		{
 			if (ft_strchr(flag, '#') && (ft_strlen(ret) + 2) == minw &&\
 				(conv == 'x' || conv == 'X' ) && ft_strcmp(ret, "0"))
 				ret = ft_strjoin_free((conv == 'x' ? "0x" : "0X"), ret, 'r');
+			else if ((conv == 'd' || conv == 'D'))
+				ret = minw_decimal(ret, flag, minw);
 			else
 				ret = ft_strjoin_free("0", ret, 'r');
 		}
+		else if (conv == '%' && ft_strchr(flag, '0'))
+			ret = ft_strjoin_free("0", ret, 'r');
 		else
 			ret = ft_strjoin_free(" ", ret, 'r');
 	}
@@ -65,4 +69,48 @@ char	*add_bin_oct(char *str)
 		i++;
 	}
 	return (ft_strrev(ret));
+}
+
+char	*add_pre(char *ret, char conv, int pre)
+{
+	int neg;
+
+	neg = (ft_strchr(ret, '-') != NULL ? 1 : 0);
+	if (pre < 0 || pre < (int)ft_strlen(ret))
+		return (ret);
+	else if (conv == 'd' || conv == 'D' || conv == 'i' || conv == 'u' || conv == 'x' || conv == 'X')
+	{
+		if (neg)
+			*ft_strchr(ret, '-') = '0';
+		while ((int)ft_strlen(ret) < pre)
+			ret = ft_strjoin_free("0", ret, 'r');
+		if (neg)
+			ret = ft_strjoin_free("-", ret, 'r');
+	}
+	else if (conv == 'p')
+	{
+		ret = ft_strdup(ret + 2); //leaks
+		while ((int)ft_strlen(ret) < pre)
+			ret = ft_strjoin_free("0", ret, 'r');
+		ret = ft_strjoin_free("0x", ret, 'r');
+	}
+	return (ret);
+}
+
+char	*minw_decimal(char *ret, char *flag, int minw)
+{
+	int neg;
+	int esp;
+
+	neg = (ft_strchr(ret, '-') ? 1 : 0);
+	esp = (ft_strchr(flag, ' ') && !neg ? 1 : 0);
+	if (neg)
+		*ft_strchr(ret, '-') = '0';
+	while ((int)ft_strlen(ret) < minw - (neg + esp))
+		ret = ft_strjoin_free("0", ret, 'r');
+	if (neg || esp)
+		ret = ft_strjoin_free((neg ? "-" : " "), ret, 'r');
+	else if (ft_strchr(flag, '+'))
+		*ret = '+';
+	return (ret);
 }

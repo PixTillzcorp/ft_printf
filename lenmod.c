@@ -1,14 +1,19 @@
 #include "ft_printf.h"
 
-void	flag_lm(const char **fmt, char **ret, char flag)
+void	flag_lm(const char **fmt, char **ret)
 {
-	(*fmt)++;
+	char flag;
+
+	flag = **fmt;
 	*ret = ft_chrjoin_free(*ret, flag, 1);
+	(*fmt)++;
 	if (**fmt == flag && (flag == 'h' || flag == 'l'))
 	{
 		*ret = ft_chrjoin_free(*ret, flag, 1);
 		(*fmt)++;
 	}
+	while (ft_islm(**fmt))
+		(*fmt)++;
 }
 
 int		ft_isconv(const char tag)
@@ -23,7 +28,8 @@ int		ft_isconv(const char tag)
 	ret += (tag == 'o' || tag == 'O' ? 1 : 0);
 	ret += (tag == 'e' || tag == 'E' ? 1 : 0);
 	ret += (tag == 'p' || tag == 'i' ? 1 : 0);
-	ret += (tag == 'b' ? 1 : 0);
+	ret += (tag == 'U' || tag == 'u' ? 1 : 0);
+	ret += (tag == 'b' || tag == 'H' ? 1 : 0);
 	return (ret);
 }
 
@@ -46,9 +52,15 @@ int		convert(va_list *args, char *flag, int minw, int pre, char *lm)
 	if (conv == 'i' || conv == 'd' || conv == 'D')
 		ret = decimal(args, lm, pre, conv);
 	else if (conv == 'c' || conv == 'C')
-		ret = chrct(args, lm, pre, conv);
+		return (chrct(args, flag, lm, minw, conv));
+	else if (conv == 'u' || conv == 'U')
+		ret = udecimal(args, lm, pre, conv);
 	else if (conv == 's' || conv == 'S')
-		ret = string(args, lm, pre, conv);
+	{
+		if (conv == 's' && !lm)
+			return (string(va_arg(*args, char *), flag, lm, minw, pre));
+		return (wstring(va_arg(*args, wint_t *), flag, lm, minw, pre));
+	}
 	else if (conv == 'o' || conv == 'O')
 		ret = base_swap_oct(args, lm, pre, conv, flag);
 	else if (conv == 'x' || conv == 'X')
@@ -56,12 +68,14 @@ int		convert(va_list *args, char *flag, int minw, int pre, char *lm)
 	else if (conv == 'e' || conv == 'E')
 		ret = base_swap_sci(args, lm, pre, conv);
 	else if (conv == 'p')
-		ret = ptr(args, lm, pre);
+		ret = ptr(args, flag, lm, minw, pre);
 	else if (conv == 'b')
 		ret = base_swap_bin(args, lm, pre);
+	else if (conv == 'H')
+		return (ft_helpflag());
 	else
 		return (0);
-	ret = add_flag(ret, minw, flag, conv);
+	ret = add_flag(ret, minw, flag, conv, pre);
 	ft_putstr(ret);
 	return ((!ret ? 0 : ft_strlen(ret)));
 }
