@@ -1,2 +1,3 @@
 # ft_printf
-la cuillere de ls ;)
+
+This project introduces parsing and architecture thinking for an optimal "printf" function.
